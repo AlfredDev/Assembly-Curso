@@ -1,0 +1,65 @@
+;;Macro para escribir en pantalla
+write macro buffer
+    mov ah,09h
+    lea dx,buffer
+    int 21h
+endm
+
+
+;;; Macro para posicionar el cursor
+Posicionar MACRO coordx,coordy
+    MOV AH,02H
+    MOV DH,coordx
+    MOV DL,coordy
+    MOV BH,0
+    INT 10H
+ENDM
+
+;;;Macro para imprimir las operaciones
+imprimir02h macro buffer
+   mov ah,02
+   mov dl,buffer
+   int 21h
+endm
+
+
+;macro que obtiene la coordenada en caracteres este resultado se devuelve en al
+calCoord macro buffer
+   mov ax,buffer
+   mov bl,8
+   div bl
+endm
+
+.code
+
+ ;;Procedimiento para leer por teclado
+  read PROC NEAR
+    Mov ah,01h
+    Int 21h
+    ret
+ read ENDP
+
+LIMPIA PROC NEAR 
+     mov ah, 0
+        ;bh para asignar color a la pantalla bh, 00 el primer d?gito es para el fondo y el segundo para el color de la letra
+     mov cx,00h
+     mov dx, 184fh
+     mov al, 3
+     int 10h
+     ret
+LIMPIA ENDP
+
+ ;;; Muestra el puntero del moues
+ mostrar proc
+     mov ax,1
+     int 33h
+     ret
+ mostrar endp 
+
+
+ ;procedimiento que lanza la interrupcion para saber si esta conectado el ratón, se retorna a ax
+conectado proc
+  mov        ax,0
+  int        33h
+  ret
+conectado endp
